@@ -21,11 +21,12 @@ def prepare_text(string):
     lemmatized_tokens = [WNL.lemmatize(token) for token in filtered_tokens]
 
     prepared_string = ' '.join(lemmatized_tokens)
-    return prepared_string
+    return prepared_string    
+   
 
 
-def get_sql_conn():
-    
+def analyze_user(userid):
+
     connection = mysql.connector.connect(
         user=config['mysql']['username'],
         password=config['mysql']['password'],
@@ -34,12 +35,6 @@ def get_sql_conn():
     )
     cursor = connection.cursor()
     
-    return cursor
-
-
-def analyze_user(userid):
-
-    cursor = get_sql_conn()
     sia = SentimentIntensityAnalyzer()
 
     cursor.execute(f"SELECT m_content FROM userMessages WHERE c_id != 836834539837456436 AND m_sender = {userid} AND LENGTH(m_content) - LENGTH(REPLACE(m_content, ' ', '')) + 1 >= 5;")
